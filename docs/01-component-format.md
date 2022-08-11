@@ -24,6 +24,14 @@ Las tres secciones (script, estilos y marcado) son opcionales.
 
 Un bloque `<script>` contiene el código JavaScript que se ejecuta cuando se crea una instancia de componente. Las variables declaradas (o importadas) en el nivel superior son 'visibles' desde el marcado del componente. Hay cuatro reglas adicionales:
 
+
+#### 0. ¿Cómo pasamos información del padre al hijo? --> PROPS
+Las props tienen que ser definidas como exportables en el hijo, para que el hijo pueda recibir la prop del padre.
+Podemos dar un valor por defecto a la prop en el componente hijo, por si no hubiera sido definido el valor en el componente padre.
+
+El valor por defecto que tenga la prop en el componente hijo es sobreescrita por el valor de esa prop que tuviera en el componente padre. El padre manda.
+
+
 #### 1. `export` crea una prop del componente.
 
 ---
@@ -93,9 +101,46 @@ Puede utilizar palabras reservadas como nombres de props.
 
 ---
 
+Svelte inyecta código que invalida el estado actual y realiza una actualización del estado por las asignaciones. Cuando se hace una asignación, svelte sabe que eso es un estado y que tiene reactividad.
+
+Asignación = asignar un valor a una variable.
+
+En react hay que encapsular código en bolsas (useEffect o useMemo) para que se renderice cuando se cambia un estado. En svelte usamos el bloque $:{} para definir el bloque que será reactivo a cambios.
+
 Para cambiar el estado del componente y desencadenar un re-render, sólo tenemos que hacer una asignación en una variable declarada localmente.
 
+
+Svelte vigila cuando se hace una asignación en counter para re-ejecutar el bloque de código reactivo:
+```
+$:{
+	console.log(counter);
+}
+```
+
+Si el bloque de código reactivo tiene una sola línea, se puede omitir las {}
+```
+$: console.log(counter);
+```
+
+##### Declaración Reactiva
+No necesita declarar la variable con let double = 0;
+```
+let counter=0;
+$: double = counter*2;
+```
+
+Si lo pasamos a bloque, entonces sí que hay que declarar la variable double, ya que en caso contrario se generaría un error: 
+```
+let counter=0;
+let doubel=0;
+S:{
+	double = counter*2;
+}
+```
+
+
 Actualizar la expresión (`count += 1`) y la asignación de la propiedad (`obj.x = y`) tiene el mismo efecto.
+
 
 ```sv
 <script>
@@ -110,6 +155,8 @@ Actualizar la expresión (`count += 1`) y la asignación de la propiedad (`obj.x
 ```
 
 ---
+
+La reactividad se dispara por las asignaciones. Los métodos que mutan matrices u objetos no disparan la reactividad. Una manera de solucionarlo es asignarse números a sí mismos para indicar al compilador de que hubo un cambio y que tiene que dispararse la reactividad. 
 
 Debido a que la reactividad de Svelte se basa en asignaciones, utilizar los métodos de matriz como `.push()` y `.splice()` no activará automáticamente las actualizaciones. Se requiere una asignación posterior para activar la actualización. Este y más detalles también se pueden encontrar en [tutorial](/tutorial/updating-arrays-and-objects).
 
@@ -126,6 +173,18 @@ Debido a que la reactividad de Svelte se basa en asignaciones, utilizar los mét
 	}
 </script>
 ```
+
+Usando el operador spread:
+```
+function addNumber(){
+	numers = [...numbers, numbers.length+1]
+}
+```
+
+##### Activar la reactividad en objetos: pop, shift, splice, map.set, set.set, etc
+Para que funcione la reactividad necesitamos *obj = obj*
+Regla: la variable que se actualiza debe directamente aparecer en el lado izquierdo de la asignación.
+
 
 #### 3. `$:` marca una sentencia como reactiva
 
