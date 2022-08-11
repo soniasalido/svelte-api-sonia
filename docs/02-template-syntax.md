@@ -2,6 +2,10 @@
 title: Template syntax
 ---
 
+Svelte mejora la sintaxis de HTML con varias funciones para expresar propiedades dinámicas, bucles y más. Usa una sintaxis especial, llamada HTMLx en svelte, que actúa como una mejora del HTML.
+
+4 Bloques de flujo de control: #each, #if, #awaite, #key.
+
 
 ### Tags
 
@@ -355,6 +359,8 @@ De manera similar, si solo desea mostrar el estado de error, puede omitir el blo
 ```
 
 ### {#key ...}
+Se usa cuando un componente se actualiza fácilmente. Es más fácil recrear su estado en lugar de actualilzarlo. También cuando se desea reproducir una transición. Una transición es un tipo de animación que sólo se activa cuando se crea o se destruyen un elemento.
+
 
 ```sv
 {#key expression}...{/key}
@@ -491,6 +497,9 @@ on:eventname|modifiers={handler}
 ---
 
 Use la directiva `on:` para escuchar eventos DOM.
+Exiten muchos eventos DOM, todos comienzan con *on*. Para decirle a svelte que se conecte (to hook) al evento, tenemos que agregarle *:* entre el on y el resto del nombre del evento --> on:keyup, on:keydown... <-- Después usaremos las llaves y colocamos el nombre de la función que será llamada cada que se se active el evento. También se podría poner una función anónima.
+
+
 
 ```sv
 <script>
@@ -635,8 +644,7 @@ Si estás usando directivas `bind:` junto con directivas `on:`, el orden en que 
 />
 ```
 
-164 / 5.000
-Resultados de traducción
+
 Aquí estábamos bindeando al valor de un input text, el cual usa el evento `input`. Los enlaces en otros elementos pueden usar diferentes eventos como `cambio`.
 
 
