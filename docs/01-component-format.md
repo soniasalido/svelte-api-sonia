@@ -19,6 +19,7 @@ Las tres secciones (script, estilos y marcado) son opcionales.
 </style>
 ```
 
+
 ### &lt;script&gt;
 
 Un bloque `<script>` contiene el código JavaScript que se ejecuta cuando se crea una instancia de componente. Las variables declaradas (o importadas) en el nivel superior son 'visibles' desde el marcado del componente. Hay cuatro reglas adicionales:
